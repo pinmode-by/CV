@@ -45,7 +45,7 @@ void on_trackbarC(int , void*) {
 
 cv::Point findCenterLine(const Mat& mat,
                      vector<cv::Point>& centers)  {
- // scaning matrix
+ // scanning matrix
  int cx = 0, cy = 0, cnt = 0;
  for (int x = 0; x < mat.rows; ++x) {
    int sumRow = 0, counter = 0;
