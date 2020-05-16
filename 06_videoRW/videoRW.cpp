@@ -40,8 +40,8 @@ int main(int, char**) {
   const std::string liveWin("Live");  
   const std::string video_file("Simplex8.avi");
   //const int videoDevice = 0;
-	//const std::string videoDevice("/dev/video0");
-  
+  //const std::string videoDevice("/dev/video0");
+	
   VideoCapture cap;
   cap.open(video_file); 
 	//cap.open(videoDevice); 
@@ -51,7 +51,7 @@ int main(int, char**) {
   }
   
   // info about video stream
-	int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
+  int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
   int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT);
   int fps = cap.get(CAP_PROP_FPS);
   cout << "Frame size : " << Size(frame_width, frame_height) << endl;
@@ -86,7 +86,7 @@ int main(int, char**) {
                   255, 0, 0);
 	//namedWindow(liveWin, WINDOW_AUTOSIZE); 
     
-	cout << "Press any key to start: " ;
+  cout << "Press any key to start: " ;
   char ch;
   std::cin >> ch;
   cout << endl;
@@ -135,15 +135,15 @@ int main(int, char**) {
     vector<cv::Point> centers;
     auto[is_line, cp] = findCenterLine(line_bin_inv, centers);
     
-    // calculate angel 
+    // calculate angle 
     double angle = 0;
     if (is_line) {
-			// on line
-      int dx = cp.x - (line_bin.cols - 1) / 2;
+      // on line
+      int dx = (line_bin.cols - 1) / 2 - cp.x;
       int dy = (line_bin.rows - 1) - cp.y; 
       
       if (dy != 0) {
-        angle = atan2(dy, dx) * 180 / CV_PI - 90;	
+	angle = atan((double)dx / dy) * 180 / CV_PI;
       } else {
       // +90/-90
         angle = (dx > 0) ? 90 : -90; 
@@ -154,7 +154,7 @@ int main(int, char**) {
     } else {   
       angle = (lastAngle > 0) ? 90 : -90; 
       cp = (lastAngle > 0) ? Point(0, line_bin.rows-1) :
-                            Point(line_bin.cols-1, line_bin.rows-1 );  
+                             Point(line_bin.cols-1, line_bin.rows-1 );  
     }
     
     angle = round(angle * 100);
